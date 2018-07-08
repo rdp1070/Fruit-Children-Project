@@ -20,6 +20,6 @@ public class StockPileController : MonoBehaviour {
 
     void RenderItems() {
         // for each item in the List, shrink the item and put it in one unit of stockpile
-
+        
     }
 }

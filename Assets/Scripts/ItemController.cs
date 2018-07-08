@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ItemController : MonoBehaviour {
 
@@ -9,6 +10,7 @@ public class ItemController : MonoBehaviour {
     public int quantity = 0;
     public int max_quantity = 99;
     public bool isHold = false;
+    public Sprite inventory_appearance;
 
     public ItemController() {
         item_name = " ";

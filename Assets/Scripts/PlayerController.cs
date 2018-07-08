@@ -9,15 +9,7 @@ public class PlayerController : MonoBehaviour
     public string player_name;
 
     [SerializeField]
-    [Tooltip("The list of inventory items.")]
-    private List<ItemController> inventory = new List<ItemController>();
-
-    [SerializeField]
-    [Tooltip("The item currently in hand.")]
-    private ItemController currentItem;
-
-    [Tooltip("How much the player can carry at once.")]
-    public int carry_capacity = 5;
+    private PlayerInventoryController inventory = new PlayerInventoryController();
 
     [Tooltip("The actual camera.")]
     public Camera player_camera;
@@ -28,7 +20,6 @@ public class PlayerController : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        inventory.Capacity = carry_capacity;
         if (player_camera == null)
         {
             player_camera = (Camera)GetComponentInChildren(typeof(Camera), false);
@@ -38,15 +29,9 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.mouseScrollDelta != Vector2.zero)
+        if (Input.GetMouseButtonUp(0))
         {
-            Debug.Log("Moused Scroll Delta: " + Input.mouseScrollDelta);
-        }
-
-        if (Input.GetMouseButtonUp(1))
-        {
-
-            Debug.Log("You hit mouse2");
+            Debug.Log("You hit Mouse 0");
             RaycastHit hit = new RaycastHit();
             //Vector2 y = player_camera.transform.forward * reach;
             Vector3 screen_middle = new Vector3(player_camera.pixelWidth / 2, player_camera.pixelHeight / 2);
@@ -63,37 +48,9 @@ public class PlayerController : MonoBehaviour
                 { // if the thing you hit is an item
                     Debug.Log("The thing you hit is an item!");
                     var pickup_item = (ItemController)hit.transform.GetComponent(typeof(ItemController)) ?? new ItemController();
-                    PickupItem(pickup_item);
+                    inventory.PickupItem(pickup_item);
                 }
             }
-        }
-    }
-
-    /// <summary>
-    /// Look in the inventory and decide to pick it up or not.
-    /// </summary>
-    /// <param name="pickup_item"> The item which you aim to pick up.</param>
-    private void PickupItem(ItemController pickup_item)
-    {
-        pickup_item.name = pickup_item.item_name;
-        // compare to each item in the inventory.
-        foreach (ItemController item in inventory)
-        {
-            // if the item is the same ID as the item you are picking up
-            if (item.item_id == pickup_item.item_id && item.quantity < item.max_quantity)
-            {
-                item.quantity++;
-                // remove item from world.
-                Destroy(pickup_item.gameObject);
-                return;
-            }
-        } // end existing item check
-        // if you make it to this point you can check for a new item now.
-        if (inventory.Count < carry_capacity) // if you can carry more new items.
-        {
-            inventory.Add(pickup_item);
-            Destroy(pickup_item.gameObject);
-            return;
         }
     }
 }
