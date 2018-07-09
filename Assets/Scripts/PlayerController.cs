@@ -50,6 +50,14 @@ public class PlayerController : MonoBehaviour
                     var pickup_item = (ItemController)hit.transform.GetComponent(typeof(ItemController)) ?? new ItemController();
                     inventory.PickupItem(pickup_item);
                 }
+
+                if (hit.transform.gameObject.tag == "Storage") {
+                    Debug.Log("The thing you hit is an storage location!");
+                    StockPileController x = hit.transform.gameObject.GetComponent<StockPileController>();
+                    if (x.numItems < x.maxItems) {
+                        x.items.Add(inventory.PlaceItem());
+                    }
+                }
             }
         }
     }

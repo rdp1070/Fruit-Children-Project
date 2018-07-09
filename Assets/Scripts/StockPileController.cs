@@ -11,11 +11,13 @@ public class StockPileController : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         items.Capacity = maxItems;
+        this.tag = "Storage";
 	}
 	
 	// Update is called once per frame
 	void Update () {
         numItems = items.Count;
+        RenderItems();
 	}
 
     void RenderItems() {

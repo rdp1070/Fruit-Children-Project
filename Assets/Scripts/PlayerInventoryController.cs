@@ -148,6 +148,22 @@ public class PlayerInventoryController : MonoBehaviour
         currentItem = new_item;
     }
 
+    public ItemController PlaceItem() {
+
+        currentItem.quantity--;
+        if (currentItem.quantity < 1) {
+            inventory.Remove(currentItem);
+        }
+        
+        UpdateUI();
+
+        ItemController temp_item = currentItem;
+        temp_item.quantity = 1;
+        temp_item.isHold = false;
+
+        return temp_item;
+    }
+
     /// <summary>
     /// Look in the inventory and decide to pick it up or not.
     /// </summary>
