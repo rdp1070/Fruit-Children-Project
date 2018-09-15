@@ -8,6 +8,10 @@ public class FollowerController : MonoBehaviour
     [Tooltip("Whether or not the follower is currently following.")]
     public bool isFollowing;
 
+
+    [Tooltip("Whether or not the follower will continue following when you walk away.")]
+    public bool CommandedToFollow;
+
     [Tooltip("What the follower is currently following.")]
     public GameObject followTarget;
 
@@ -47,50 +51,51 @@ public class FollowerController : MonoBehaviour
         satisfied_distance = speed;
         panic_distance = 30f;
         strength = 1;
-        isFollowing = true;
+        isFollowing = false;
     }
 
     void FixedUpdate()
     {
-
         // get the location of the FollowTarget
         var target_loc = followTarget.transform.position;
         var distance = Vector3.Distance(target_loc, transform.position);
 
-        if (isFollowing) // if it is currently following
+        // if you have been comanded to follow
+        // If you are not in satisfied distance, walk towards
+        // If you are just turn green and stop following.
+
+        if (CommandedToFollow == true) // if you have been told to follow
         {
-            // if they are close enough, just skip this part.
-            if (distance > satisfied_distance)
+            if (isFollowing) // if it is currently following
             {
-                //rotate to look at the player
+                // rotate to look at the player
                 myTransform.rotation = Quaternion.Slerp(myTransform.rotation,
                 Quaternion.LookRotation(target_loc - myTransform.position), rotationSpeed * Time.deltaTime);
 
                 if (distance > panic_distance)
                 {
-                    //move towards the player in a hurry
+                    // move towards the player in a hurry
                     renderer.material.color = Color.red;
                     myTransform.position += myTransform.forward * sprint_speed * Time.deltaTime;
                 }
                 else
                 {
-                    //move towards the player
+                    // move towards the player
                     renderer.material.color = Color.gray;
                     myTransform.position += myTransform.forward * speed * Time.deltaTime;
                 }
             }
-            else
+
+            if (distance > satisfied_distance && isFollowing == false) // if they aren't satisfied with the distance
+            {
+                isFollowing = true;
+            }
+            else if (distance < satisfied_distance) // if they aren't satisfied with the distance
             {
                 renderer.material.color = Color.green;
                 isFollowing = false;
             }
         }
-        else {
-            if (distance >= satisfied_distance * 2) {
-                isFollowing = true;
-            }
-        }
-
-        
     }
 }
+

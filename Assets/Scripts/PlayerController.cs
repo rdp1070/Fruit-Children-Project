@@ -50,8 +50,13 @@ public class PlayerController : MonoBehaviour
                     var pickup_item = (ItemController)hit.transform.GetComponent(typeof(ItemController)) ?? new ItemController();
                     inventory.PickupItem(pickup_item);
                 }
-
-                if (hit.transform.gameObject.tag == "Storage") {
+                else if (hit.transform.gameObject.tag == "Baby")
+                { // if the thing you hit is an item
+                    Debug.Log("The thing you hit is a baby!");
+                    var temp_baby = (FollowerController)hit.transform.GetComponent(typeof(FollowerController)) ?? new FollowerController();
+                    temp_baby.CommandedToFollow = !temp_baby.CommandedToFollow;
+                }
+                else if (hit.transform.gameObject.tag == "Storage") {
                     Debug.Log("The thing you hit is an storage location!");
                     StockPileController x = hit.transform.gameObject.GetComponent<StockPileController>();
                     if (x.numItems < x.maxItems) {
