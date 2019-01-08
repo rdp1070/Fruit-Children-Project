@@ -8,6 +8,7 @@ TagManager:
   - UI Canvas
   - Storage
   - Baby
+  - Stat Panel
   layers:
   - Default
   - TransparentFX
